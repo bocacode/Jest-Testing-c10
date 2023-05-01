@@ -1,54 +1,57 @@
-function Account(name, balance) {
-  this.name = name;
-  this.balance = balance;
-}
+/*
 
-Account.prototype.deposit = function(amount) {
-  if (this._isPositive(amount)) {
-    this.balance += amount;
-    console.info(`Deposit: ${this.name} new balance is ${this.balance}`);
-    return true;
+Usage: 
+
+let myAccount = new Account(100) 
+
+-- Methods available-- 
+.deposit(amount) // will return true with a valid deposit
+.withdrawal(amount) // will return true if you're withdrawing only what your account has
+
+*/
+
+
+export class Account {
+  //property (what we keep track of)
+  balance = 0;
+
+  // Initial balance set and MUST be zero or higher
+  constructor(initialBalance) {
+    if (this.isPositive(initialBalance)) {
+      this.balance = initialBalance;
+      return true;
+    } else {
+      return false;
+    }
   }
-  return false;
-}
 
-Account.prototype.withdraw = function(amount) {
-  if (this._isAllowed(amount)) {
-    this.balance -= amount;
-    console.info(`Withdraw: ${this.name} new balance is ${this.balance}`);
-    return true;
+  // You can deposit any amount, as long as it's zero or higher
+  deposit(amount) {
+    if (this.isPositive(amount)) {
+      this.balance += amount;
+      return true;
+    } else {
+      return false;
+    }
   }
-  return false;
-}
 
-Account.prototype.transfer = function(amount, account) {
-  if (this.withdraw(amount) && account.deposit(amount)) {
-    console.info(`Transfer: ${amount} has been moved from ${this.name} to ${account.name}`);
-    return true;
+  // You can deposit any amount, as long as it's zero or higher
+  withdrawal(amount) {
+    if (this.isPositive(amount) && this.balance >= amount) {
+      this.balance -= amount;
+      return true;
+    } else {
+      return false;
+    }
   }
-  return false;
-}
 
-
-Account.prototype._isPositive = function(amount) {
-  const isPositive = amount > 0;
-  if (!isPositive) {
-    console.error('Amount must be positive!');
-    return false;
+  // "Helper" utility to check the amount is Positive (or zero)
+  isPositive(amount) {
+    if (amount >= 0) {
+      return true;
+    } else {
+      return true;
+    }
   }
-  return true;
+
 }
-
-Account.prototype._isAllowed = function(amount) {
-  if (!this._isPositive(amount)) return false;
-
-  const isAllowed = this.balance - amount >= 0;
-  if (!isAllowed) {
-    console.error('You have insufficent funds!');
-    return false;
-  }
-  return true;
-}
-
-const a = new Account('a', 100);
-const b = new Account('b', 0);
